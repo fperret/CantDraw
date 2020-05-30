@@ -22,6 +22,7 @@ public class Player : MonoBehaviour
     private float m_speed = 3.0f;
     private float m_raycastLength = 3.0f;
 
+    [SerializeField]
     private GameObject m_currentTarget = null;
     private Color      m_saveTargetColor;
 

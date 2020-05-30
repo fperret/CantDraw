@@ -50,3 +50,9 @@ TagManager:
   - name: Player
     uniqueID: 2626372825
     locked: 0
+  - name: PlankFront
+    uniqueID: 3694750977
+    locked: 0
+  - name: PlankSide
+    uniqueID: 827723523
+    locked: 0
