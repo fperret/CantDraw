@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Feet
   - Interactable
+  - Ground
   layers:
   - Default
   - TransparentFX

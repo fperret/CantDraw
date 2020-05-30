@@ -11,12 +11,14 @@ public class Player : MonoBehaviour
         BOTTOM
     }
 
+    public Sprite m_sandDeep;
+
     public Transform m_center;
 
     public GameObject m_holdingObject = null;
 
     //private Direction m_direction = Direction.BOTTOM;
-
+    private GameObject m_groundTile = null;
     private float m_speed = 3.0f;
     private float m_raycastLength = 3.0f;
 
@@ -68,7 +70,10 @@ public class Player : MonoBehaviour
             }
         }
 
-        Debug.Log(m_direction);
+        if (Input.GetKey(KeyCode.E))
+        {
+            m_groundTile.GetComponent<SpriteRenderer>().sprite = m_sandDeep;
+        }
     }
 
     // Update the game object of the new target (highlight, etc...)
@@ -140,9 +145,18 @@ public class Player : MonoBehaviour
 
     }
 
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Ground")
+        {
+            m_groundTile = other.gameObject;
+        }
+    }
+
     void OnTriggerExit2D(Collider2D other)
     {
-        Collider2D[] myColliders = new Collider2D[2];
+        // Doesn't work anymore ?
+        /*Collider2D[] myColliders = new Collider2D[2];
         int nbColliders = other.GetContacts(myColliders);
         bool feetCollider = false;
         for (int i = 0; i < nbColliders; ++i)
@@ -153,12 +167,13 @@ public class Player : MonoBehaviour
         }
         if (feetCollider)
         {
+            m_groundTile = other.gameObject;
             Color newColor = other.GetComponent<SpriteRenderer>().color;
             newColor.r *= 0.9f;
             newColor.g *= 0.9f;
             newColor.b *= 0.9f;
             other.GetComponent<SpriteRenderer>().color = newColor;
-        }        
+        }*/
     }
 
 }
