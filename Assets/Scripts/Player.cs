@@ -13,6 +13,8 @@ public class Player : MonoBehaviour
 
     public Transform m_center;
 
+    public GameObject m_holdingObject = null;
+
     //private Direction m_direction = Direction.BOTTOM;
 
     private float m_speed = 3.0f;
@@ -23,7 +25,7 @@ public class Player : MonoBehaviour
 
     private Vector2 m_movement;
     // Simulate the direction like a 3D object would have
-    private Vector2 m_direction;
+    public Vector2 m_direction;
     private Rigidbody2D m_rigidBody;
     private Animator    m_animator;
 
@@ -41,14 +43,32 @@ public class Player : MonoBehaviour
         m_movement.x = Input.GetAxisRaw("Horizontal");
         m_movement.y = Input.GetAxisRaw("Vertical");
 
-        m_animator.SetFloat("Horizontal", m_movement.x);
-        m_animator.SetFloat("Vertical", m_movement.y);
-
         // Update the internal direction if there is a player movement input
         if (!(m_movement.x == 0 && m_movement.y == 0))
         {
+
+            m_animator.SetFloat("Horizontal", m_movement.x);
+            m_animator.SetFloat("Vertical", m_movement.y);
+
             m_direction = m_movement;
         }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (m_holdingObject != null && m_holdingObject.GetComponent<Interactable>()!= null)
+            {
+                m_holdingObject.GetComponent<Interactable>().drop();
+                m_holdingObject = null;
+            }
+
+            if (m_currentTarget != null && m_currentTarget.GetComponent<Interactable>() != null)
+            {
+                m_currentTarget.GetComponent<Interactable>().use(gameObject);
+                m_holdingObject = m_currentTarget;
+            }
+        }
+
+        Debug.Log(m_direction);
     }
 
     // Update the game object of the new target (highlight, etc...)
