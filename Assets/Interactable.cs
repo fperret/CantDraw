@@ -22,7 +22,7 @@ public class Interactable : MonoBehaviour
     {
         GetComponent<Collider2D>().enabled = false;
         transform.parent = player.transform;
-        transform.localPosition = player.GetComponent<Player>().m_center.localPosition + new Vector3(player.GetComponent<Player>().m_direction.x, player.GetComponent<Player>().m_direction.y);
+        transform.localPosition = player.GetComponent<Player>().center().localPosition + new Vector3(player.GetComponent<Player>().m_direction.x, player.GetComponent<Player>().m_direction.y);
     }
 
     public void drop()
