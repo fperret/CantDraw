@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
 
     public void win()
     {
+        Time.timeScale = 0;
         m_uiManager.screenWin();
     }
 }
