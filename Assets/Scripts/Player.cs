@@ -4,12 +4,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private enum Direction {
-        LEFT,
-        UP,
-        RIGHT,
-        BOTTOM
-    }
 
     // Simulate the direction like a 3D object would have
     public Vector2 m_direction;
@@ -38,7 +32,7 @@ public class Player : MonoBehaviour
         {
             if (m_sandMarkOK)
             {
-                GameObject sandMark = (GameObject)Instantiate(m_sandMark, transform.position, Quaternion.identity);
+                GameObject sandMark = (GameObject)Instantiate(m_sandMark, m_center.position, Quaternion.identity);
                 m_sandMarkOK = false;
             }
         }

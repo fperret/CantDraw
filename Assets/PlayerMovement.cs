@@ -12,6 +12,7 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D m_rigidBody;
 
     private Player m_player;
+    private OrientationManagement m_orientationManagement;
 
     // Start is called before the first frame update
     void Start()
@@ -19,6 +20,7 @@ public class PlayerMovement : MonoBehaviour
         m_rigidBody = GetComponent<Rigidbody2D>();
         m_animator = GetComponent<Animator>();
         m_player = GetComponent<Player>();
+        m_orientationManagement = GetComponent<OrientationManagement>();
     }
 
     // Update is called once per frame
@@ -35,6 +37,8 @@ public class PlayerMovement : MonoBehaviour
             m_animator.SetFloat("Vertical", m_movement.y);
 
             m_player.direction(m_movement);
+
+            m_orientationManagement.setOrientation(m_movement);
         }
 
     }
