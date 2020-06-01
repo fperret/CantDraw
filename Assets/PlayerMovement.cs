@@ -26,8 +26,14 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        m_movement.x = Input.GetAxisRaw("Horizontal");
-        m_movement.y = Input.GetAxisRaw("Vertical");
+        if ((m_movement.x = Input.GetAxisRaw("Horizontal")) != 0)
+        {
+            m_movement.y = 0;
+        }
+        else
+        {
+            m_movement.y = Input.GetAxisRaw("Vertical");
+        }
 
         // Update the internal direction if there is a player movement input
         if (!(m_movement.x == 0 && m_movement.y == 0))
@@ -36,10 +42,9 @@ public class PlayerMovement : MonoBehaviour
             m_animator.SetFloat("Horizontal", m_movement.x);
             m_animator.SetFloat("Vertical", m_movement.y);
 
-            m_player.direction(m_movement);
-
             m_orientationManagement.setOrientation(m_movement);
         }
+        m_player.direction(m_movement);
 
     }
 

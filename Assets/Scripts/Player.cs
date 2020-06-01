@@ -8,11 +8,17 @@ public class Player : MonoBehaviour
     // Simulate the direction like a 3D object would have
     public Vector2 m_direction;
 
-    public Sprite m_sandDeep;
-    private float m_sandMarkTimer = 0.0f;
-    private bool m_sandMarkOK = true;
+    public float m_footPrintsPeriod = 0.3f;
+    public int m_maxNbFootPrints = 40;
 
-    public GameObject m_sandMark;
+    private float m_footPrintsTimer = 0.0f;
+    private bool m_spawnFootPrint = true;
+    private List<GameObject> m_activeFootPrints = new List<GameObject>();    
+
+
+    public Transform m_footPrintsParent;
+    public GameObject m_footPrintsVertical;
+    public GameObject m_footPrintsHorizontal;
 
     [SerializeField]
     private Transform m_center;
@@ -20,27 +26,43 @@ public class Player : MonoBehaviour
     private GameObject m_groundTile = null;
 
 
+    private OrientationManagement m_orientationManagement;
+
     // Start is called before the first frame update
     void Start()
     {
+        m_orientationManagement = GetComponent<OrientationManagement>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.E))
+        //if (Input.GetKey(KeyCode.E))
+        //{
+        if (m_direction.sqrMagnitude != 0)
         {
-            if (m_sandMarkOK)
+            if (m_spawnFootPrint)
             {
-                GameObject sandMark = (GameObject)Instantiate(m_sandMark, m_center.position, Quaternion.identity);
-                m_sandMarkOK = false;
+                if (m_orientationManagement.m_orientation == OrientationManagement.Orientation.UP || m_orientationManagement.m_orientation == OrientationManagement.Orientation.DOWN)
+                    m_activeFootPrints.Add((GameObject)Instantiate(m_footPrintsVertical, m_center.position, Quaternion.identity, m_footPrintsParent));
+                else if (m_orientationManagement.m_orientation == OrientationManagement.Orientation.LEFT || m_orientationManagement.m_orientation == OrientationManagement.Orientation.RIGHT)
+                    m_activeFootPrints.Add((GameObject)Instantiate(m_footPrintsHorizontal, m_center.position, Quaternion.identity, m_footPrintsParent));
+                m_spawnFootPrint = false;
             }
-        }
-        m_sandMarkTimer += Time.deltaTime;
-        if (m_sandMarkTimer >= 0.2f)
+        //}
+        m_footPrintsTimer += Time.deltaTime;
+        if (m_footPrintsTimer >= 0.3f)
         {
-            m_sandMarkOK = true;
-            m_sandMarkTimer = 0;
+            m_spawnFootPrint = true;
+            m_footPrintsTimer = 0;
+        }
+        }
+
+        // Optimize ?
+        while (m_activeFootPrints.Count > m_maxNbFootPrints)
+        {
+            GameObject.Destroy(m_activeFootPrints[0]);
+            m_activeFootPrints.RemoveAt(0);
         }
     }
 

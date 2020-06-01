@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class OrientationManagement : MonoBehaviour
 {
-    private enum Orientation {
+    public enum Orientation {
         LEFT,
         UP,
         RIGHT,
         DOWN
     }
 
-    private Orientation m_orientation;
+    public Orientation m_orientation;
 
     // We need to update the collider depending on the sprite used by the animator
     private BoxCollider2D   m_collider;

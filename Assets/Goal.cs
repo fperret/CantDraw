@@ -77,7 +77,7 @@ public class Goal : MonoBehaviour
                     bool check = false;
                     foreach (Collider2D overlap in overlaps)
                     {
-                        if (overlap.tag == "sandMarked")
+                        if (overlap.tag == "FootPrints")
                         {
                             check = true;
                             nbOfValidGoals++;
