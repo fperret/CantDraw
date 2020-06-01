@@ -8,6 +8,7 @@ TagManager:
   - Interactable
   - Ground
   - FootPrints
+  - sandMarked
   layers:
   - Default
   - TransparentFX
@@ -48,11 +49,11 @@ TagManager:
   - name: Background
     uniqueID: 1542271907
     locked: 0
-  - name: PlankFront
-    uniqueID: 3694750977
-    locked: 0
   - name: PlankSide
     uniqueID: 827723523
+    locked: 0
+  - name: PlankFront
+    uniqueID: 3694750977
     locked: 0
   - name: Items
     uniqueID: 1120859871
