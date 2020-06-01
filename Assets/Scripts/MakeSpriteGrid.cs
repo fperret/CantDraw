@@ -19,18 +19,6 @@ public class MakeSpriteGrid : MonoBehaviour
                 if (Random.Range(1, 10) > 7)
                     tileToUse = m_sandTilePimped;
 
-                /*GameObject tile = (GameObject)Instantiate(m_basicGroundTile, transform);
-                tile.transform.localPosition = new Vector2(x, y);
-
-                GameObject tile2 = (GameObject)Instantiate(m_basicGroundTile, transform);
-                tile2.transform.localPosition = new Vector2(x + 0.5f, y);
-
-                GameObject tile3 = (GameObject)Instantiate(m_basicGroundTile, transform);
-                tile3.transform.localPosition = new Vector2(x, y + 0.5f);
-
-                GameObject tile4 = (GameObject)Instantiate(m_basicGroundTile, transform);
-                tile4.transform.localPosition = new Vector2(x + 0.5f, y + 0.5f);*/
-
                 GameObject tile = (GameObject)Instantiate(tileToUse, transform);
                 tile.transform.localPosition = new Vector2(x, y);
 
