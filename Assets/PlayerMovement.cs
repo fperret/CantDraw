@@ -45,10 +45,20 @@ public class PlayerMovement : MonoBehaviour
             m_orientationManagement.setOrientation(m_movement);
         }
         m_player.direction(m_movement);
-
     }
 
-    private void FixedUpdate() {
-        m_rigidBody.MovePosition(m_rigidBody.position + m_movement * m_speed * Time.fixedDeltaTime);    
+    void FixedUpdate() {
+        Vector2 oldLocation = m_rigidBody.position;
+        Vector2 moveVector = m_movement * m_speed * Time.fixedDeltaTime;
+
+        oldLocation = PixelPerfectClamp(oldLocation, 8);
+        moveVector = PixelPerfectClamp(moveVector, 8);
+        m_rigidBody.MovePosition(oldLocation + moveVector);
+    }
+
+    private Vector2 PixelPerfectClamp(Vector2 moveVector, float pixelsPerUnit)
+    {
+        Vector2 vectorInPixels = new Vector2(Mathf.RoundToInt(moveVector.x * pixelsPerUnit), Mathf.RoundToInt(moveVector.y * pixelsPerUnit));
+        return vectorInPixels / pixelsPerUnit;
     }
 }

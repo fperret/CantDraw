@@ -48,6 +48,7 @@ public class Goal : MonoBehaviour
             points = new List<PointGoal>();
             foreach (Transform child in baseTransform)
             {
+                child.GetComponent<SpriteRenderer>().enabled = false;
                 points.Add(new PointGoal(child.transform.position, child.GetComponent<SpriteRenderer>()));
             }
 
