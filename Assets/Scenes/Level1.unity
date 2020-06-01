@@ -4339,7 +4339,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9e07a48174c2db4fa638f8a0d89a0ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_basicGroundTile: {fileID: 7273209991834755095, guid: 6e16a145589ad404a90232398cdec546,
+  m_basicGroundTile: {fileID: 8812038488935151558, guid: e8320085a813f314c89459bf7ef1b3a3,
+    type: 3}
+  m_sandTilePimped: {fileID: 2407344683457906440, guid: ace0ca1191bc85a429616e2902620962,
     type: 3}
 --- !u!1001 &948987715
 PrefabInstance:

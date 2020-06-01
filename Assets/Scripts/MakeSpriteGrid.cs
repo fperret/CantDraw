@@ -5,6 +5,8 @@ using UnityEngine;
 public class MakeSpriteGrid : MonoBehaviour
 {
     public GameObject m_basicGroundTile;
+    public GameObject m_sandTilePimped;
+
 
     // Start is called before the first frame update
     void Start()
@@ -13,7 +15,11 @@ public class MakeSpriteGrid : MonoBehaviour
         {
             for (int x = 0; x < Constants.g_gridSizeLength; ++x)
             {
-                GameObject tile = (GameObject)Instantiate(m_basicGroundTile, transform);
+                GameObject tileToUse = m_basicGroundTile;
+                if (Random.Range(1, 10) > 7)
+                    tileToUse = m_sandTilePimped;
+
+                /*GameObject tile = (GameObject)Instantiate(m_basicGroundTile, transform);
                 tile.transform.localPosition = new Vector2(x, y);
 
                 GameObject tile2 = (GameObject)Instantiate(m_basicGroundTile, transform);
@@ -23,6 +29,18 @@ public class MakeSpriteGrid : MonoBehaviour
                 tile3.transform.localPosition = new Vector2(x, y + 0.5f);
 
                 GameObject tile4 = (GameObject)Instantiate(m_basicGroundTile, transform);
+                tile4.transform.localPosition = new Vector2(x + 0.5f, y + 0.5f);*/
+
+                GameObject tile = (GameObject)Instantiate(tileToUse, transform);
+                tile.transform.localPosition = new Vector2(x, y);
+
+                GameObject tile2 = (GameObject)Instantiate(tileToUse, transform);
+                tile2.transform.localPosition = new Vector2(x + 0.5f, y);
+
+                GameObject tile3 = (GameObject)Instantiate(tileToUse, transform);
+                tile3.transform.localPosition = new Vector2(x, y + 0.5f);
+
+                GameObject tile4 = (GameObject)Instantiate(tileToUse, transform);
                 tile4.transform.localPosition = new Vector2(x + 0.5f, y + 0.5f);
             }
         }
