@@ -6,7 +6,8 @@ public class CreateWave : MonoBehaviour
 {
     const int m_numberOfWaves = 4;
     const int m_tilesPerWaves = 200;
-    const float m_maxWaveY = 2;
+
+    public float m_maxWaveY = 2;
     const float m_offsetY = -1;
 
     // X position of one tile

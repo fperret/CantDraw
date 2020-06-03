@@ -51,7 +51,7 @@ public class Player : MonoBehaviour
             }
         //}
         m_footPrintsTimer += Time.deltaTime;
-        if (m_footPrintsTimer >= 0.3f)
+        if (m_footPrintsTimer >= m_footPrintsPeriod)
         {
             m_spawnFootPrint = true;
             m_footPrintsTimer = 0;

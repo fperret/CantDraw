@@ -7,7 +7,6 @@ public class MakeSpriteGrid : MonoBehaviour
     public GameObject m_basicGroundTile;
     public GameObject m_sandTilePimped;
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -21,15 +20,6 @@ public class MakeSpriteGrid : MonoBehaviour
 
                 GameObject tile = (GameObject)Instantiate(tileToUse, transform);
                 tile.transform.localPosition = new Vector2(x, y);
-
-                GameObject tile2 = (GameObject)Instantiate(tileToUse, transform);
-                tile2.transform.localPosition = new Vector2(x + 0.5f, y);
-
-                GameObject tile3 = (GameObject)Instantiate(tileToUse, transform);
-                tile3.transform.localPosition = new Vector2(x, y + 0.5f);
-
-                GameObject tile4 = (GameObject)Instantiate(tileToUse, transform);
-                tile4.transform.localPosition = new Vector2(x + 0.5f, y + 0.5f);
             }
         }
     }

@@ -9,6 +9,9 @@ public class Goal : MonoBehaviour
     public class PointGoal {
 
         [SerializeField]
+        private float m_detectionRadius;
+
+        [SerializeField]
         public Vector2 position;
 
         [SerializeField]
