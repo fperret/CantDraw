@@ -4,17 +4,21 @@ using UnityEngine;
 
 public class CreateWave : MonoBehaviour
 {
-    const int m_numberOfWaves = 4;
-    const int m_tilesPerWaves = 200;
-
+    public int m_numberOfWaves = 4;
+    public int m_tilesPerWaves = 500;
     public float m_maxWaveY = 2;
+
+    public float m_distanceBetweenWaves = 2.5f;
+    private float m_timerBetweenWaves;
     const float m_offsetY = -1;
 
+    // Size : m_tilesPerWaves
     // X position of one tile
-    static readonly float[] x_positions = new float[m_tilesPerWaves];
-    // X position multiplied by the frequency used in the Sine function
-    static readonly float[] x_positionsFrequencyAdjusted = new float[m_tilesPerWaves];
+    private float[] x_positions;
 
+    // Size : m_tilesPerWaves
+    // X position multiplied by the frequency used in the Sine function
+    private float[] x_positionsFrequencyAdjusted;
     public GameObject m_waveTile;
 
     public Vector3  m_globalPos;
@@ -23,17 +27,32 @@ public class CreateWave : MonoBehaviour
 
     public float m_speed = 0.25f;
 
-    private GameObject[,] m_wave = new GameObject[m_numberOfWaves, m_tilesPerWaves];
-    private float[] m_waveOffsetX = new float[m_numberOfWaves];
-    private float[] m_waveTimers = new float[m_numberOfWaves];
+    // Size : m_numberOfWaves x m_titlesPerWaves
+    private GameObject[,] m_wave;
+
+    // Size : m_numberOfWaves
+    private float[] m_waveOffsetX;
+
+    // Size : m_numberOfWaves
+    private float[] m_waveTimers;
 
     // /!\ We use this timer only to start the wave at a different time /!\
     // It will stop getting incremented at one point
     private float m_globalTimer = 0.0f;
     public Transform m_waveParent;
+
+
     // Start is called before the first frame update
     void Start()
     {
+        x_positions = new float[m_tilesPerWaves];
+        x_positionsFrequencyAdjusted = new float[m_tilesPerWaves];
+        m_wave = new GameObject[m_numberOfWaves, m_tilesPerWaves];
+        m_waveOffsetX = new float[m_numberOfWaves];
+        m_waveTimers = new float[m_numberOfWaves];
+
+        m_timerBetweenWaves = waveTimerFromDistance();
+
         // The x position of the tiles stay the same so we calculate them at the start
         for (int i = 0; i < m_tilesPerWaves; ++i)
         {
@@ -46,6 +65,8 @@ public class CreateWave : MonoBehaviour
             for (int j = 0; j < m_tilesPerWaves; ++j)
             {
                 m_wave[i, j] = (GameObject)Instantiate(m_waveTile, m_waveParent);
+                // Hide the waves tile, they will be set to the correct value in Update() when needed
+                m_wave[i, j].transform.position = new Vector3(-100, -100);
             }
             m_waveTimers[i] = 0.0f;
             randomizeWaveOffset(i);
@@ -60,7 +81,7 @@ public class CreateWave : MonoBehaviour
             updateOneWave(i, m_waveOffsetX[i]);
             m_waveTimers[i] += Time.deltaTime;
 
-            if (m_globalTimer < (3.0f * (i + 1)))
+            if (m_globalTimer < (m_timerBetweenWaves * (i + 1)))
                 break;
         }
 
@@ -97,7 +118,8 @@ public class CreateWave : MonoBehaviour
             // Offset the position to keep the waves separated and shifted
             newPosition += m_globalPos;
 
-            m_wave[index, i].transform.position = newPosition;
+            //m_wave[index, i].transform.position = newPosition;
+            m_wave[index, i].transform.localPosition = newPosition;
         }
 
         // If the wave is high enough (not in the sea anymore) we reposition it at the bottom
@@ -106,5 +128,11 @@ public class CreateWave : MonoBehaviour
             m_waveTimers[index] = 0;
             randomizeWaveOffset(index);
         }
+    }
+
+    private float waveTimerFromDistance()
+    {
+        // 3.75 sec = 1 on Y
+        return (m_distanceBetweenWaves * 3.75f);
     }
 }
