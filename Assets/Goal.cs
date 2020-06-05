@@ -97,7 +97,7 @@ public class Goal : MonoBehaviour
                 }
                 else
                     subGoal.valid = false;
-                Debug.Log(nbOfValidGoals);
+                //Debug.Log(nbOfValidGoals);
             }
             if (nbOfValidSubGoals == m_subGoals.Count)
             {

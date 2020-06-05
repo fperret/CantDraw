@@ -5,11 +5,13 @@ using UnityEngine;
 public class GoalSign : MonoBehaviour
 {
     public GameObject  m_goalSpeechBubble;
+    private GameObject m_goalModel;
 
     // Start is called before the first frame update
     void Start()
     {
         m_goalSpeechBubble = transform.Find("GoalSpeechBubble").gameObject;
+        m_goalModel = m_goalSpeechBubble.transform.Find("GoalModel").gameObject;
     }
 
     // Update is called once per frame
@@ -22,6 +24,7 @@ public class GoalSign : MonoBehaviour
     {
         if (other.tag == "Player")
         {
+            Debug.Log("Enter sign zone");
             m_goalSpeechBubble.SetActive(true);
         }
     }
@@ -30,7 +33,11 @@ public class GoalSign : MonoBehaviour
     {
         if (other.tag == "Player")
         {
-            m_goalSpeechBubble.SetActive(false);
+            //GetComponent<Animation>().Play();
+            GetComponent<Animator>().Play("GoalFade");
+            //m_goalSpeechBubble.GetComponent<Animator>().Play("GoalFade");
+            //m_goalModel.GetComponent<Animator>().Play("Goal");
+            //m_goalSpeechBubble.SetActive(false);
         }
     }
 }
