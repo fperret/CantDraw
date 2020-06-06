@@ -6,6 +6,9 @@ public class Interactable : MonoBehaviour
 {
     public GameObject m_resourceToGive;
 
+    [SerializeField]
+    private string m_name;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -28,5 +31,11 @@ public class Interactable : MonoBehaviour
     public void drop()
     {
         transform.parent = null;
+    }
+
+
+    public string getName()
+    {
+        return m_name;
     }
 }

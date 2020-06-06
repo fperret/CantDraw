@@ -37,8 +37,6 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (Input.GetKey(KeyCode.E))
-        //{
         if (m_direction.sqrMagnitude != 0)
         {
             if (m_spawnFootPrint)
@@ -49,13 +47,12 @@ public class Player : MonoBehaviour
                     m_activeFootPrints.Add((GameObject)Instantiate(m_footPrintsHorizontal, m_center.position, Quaternion.identity, m_footPrintsParent));
                 m_spawnFootPrint = false;
             }
-        //}
-        m_footPrintsTimer += Time.deltaTime;
-        if (m_footPrintsTimer >= m_footPrintsPeriod)
-        {
-            m_spawnFootPrint = true;
-            m_footPrintsTimer = 0;
-        }
+            m_footPrintsTimer += Time.deltaTime;
+            if (m_footPrintsTimer >= m_footPrintsPeriod)
+            {
+                m_spawnFootPrint = true;
+                m_footPrintsTimer = 0;
+            }
         }
 
         // Optimize ?

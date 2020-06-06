@@ -4,17 +4,16 @@ using UnityEngine;
 
 public class Goal : MonoBehaviour
 {
+    public int m_subGoalsValidated = 0;
 
-    [System.Serializable]
+    static public bool m_hideSprite = false;
+
     public class PointGoal {
 
-        [SerializeField]
         private float m_detectionRadius;
 
-        [SerializeField]
         public Vector2 position;
 
-        [SerializeField]
         public bool    valid;
 
         SpriteRenderer spriteRenderer;
@@ -37,23 +36,60 @@ public class Goal : MonoBehaviour
 
     }
 
-    [System.Serializable]
-    public class SubGoal {
+    public class SubGoalData {
 
-        [SerializeField]
         public List<PointGoal> points;//
 
-        [SerializeField]
+        public List<SubGoalData> subGoals;
+
         public bool            valid;
 
-        public SubGoal(Transform baseTransform)
+        public bool             mandatory;
+
+        public float            nbOfGoalsForValid;
+
+        // Fetched from monobehavior SubGoal.target.m_name
+        public string           target;
+
+        public SubGoalData(Transform baseTransform)
         {
+            mandatory = (baseTransform.tag == "mandatoryGoal");
+
             points = new List<PointGoal>();
+            subGoals = new List<SubGoalData>();
+
+            bool recursiveSubGoal = false;
             foreach (Transform child in baseTransform)
             {
-                child.GetComponent<SpriteRenderer>().enabled = false;
-                points.Add(new PointGoal(child.transform.position, child.GetComponent<SpriteRenderer>()));
+                if (child.TryGetComponent(out SubGoal childSubGoal))
+                {
+                    recursiveSubGoal = true;
+                    subGoals.Add(new SubGoalData(child));
+                }
+                else
+                {
+                    if (recursiveSubGoal)
+                        throw new UnityException("recursive SubGoals and PointGoals at the same level of " + child.name);
+
+                    if (Goal.m_hideSprite)
+                        child.GetComponent<SpriteRenderer>().enabled = false;
+
+                    points.Add(new PointGoal(child.transform.position, child.GetComponent<SpriteRenderer>()));
+                }
             }
+
+            nbOfGoalsForValid = -1;
+            target = "";
+            if (baseTransform.TryGetComponent(out SubGoal subGoal))
+            {
+                if (subGoal.target != null)
+                    target = subGoal.target.getName();
+                if (subGoal.m_nbOfGoalsForValid >= 0)
+                    nbOfGoalsForValid = subGoal.m_nbOfGoalsForValid;
+            }
+
+            if (nbOfGoalsForValid == -1)
+                nbOfGoalsForValid = (float)points.Count * 0.8f;
 
             valid = false;
         }
@@ -61,7 +97,69 @@ public class Goal : MonoBehaviour
 
 
     [SerializeField]
-    public List<SubGoal> m_subGoals = new List<SubGoal>();
+    public List<SubGoalData> m_subGoals = new List<SubGoalData>();
+
+
+    private int getNbOfValidPointGoals(SubGoalData subGoal)
+    {
+        // ! This method expect only PointGoal as child so do not pass a recursive subGoal !
+        int nbOfValidGoals = 0;
+
+        foreach (PointGoal pointGoal in subGoal.points)
+        {
+            // Essayer OverlapCircleNonAlloc() pour optimiser les performances
+            // Il faudra passer un array de collider suffisament grand pour avoir tous les resultats possibles
+            //Collider2D[] overlaps = Physics2D.OverlapCircleAll(pointGoal.position, 0.2f);
+            Collider2D[] overlaps = Physics2D.OverlapPointAll(pointGoal.position);
+            bool check = false;
+            foreach (Collider2D overlap in overlaps)
+            {
+                // Specific target for all the PointGoals of this SubGoal
+                if (subGoal.target.Length != 0)
+                {
+                    if (overlap.TryGetComponent(out Interactable interactable))
+                    {
+                        if (interactable.getName() == subGoal.target)
+                        {
+                            check = true;
+                            nbOfValidGoals++;
+                            break;
+                        }
+                    }
+                }
+                // Else if no target is specified we check for the FootPrints
+                else if (overlap.tag == "FootPrints")
+                {
+                    check = true;
+                    nbOfValidGoals++;
+                    break ;
+                }
+            }
+            pointGoal.updateState(check);
+        }
+
+        return nbOfValidGoals;
+    }
+
+    bool processSubGoalsWithRecursion(SubGoalData subGoalWithRecursion)
+    {
+        // If we want to do a real full recursive architecture we need to change something around here probably
+        bool atLeastOneRecursiveIsValid = false;
+        foreach (SubGoalData recursiveSubGoal in subGoalWithRecursion.subGoals)
+        {
+            // Here we expect to only encounter PointGoals, else boom
+            int nbOfValidGoals = getNbOfValidPointGoals(recursiveSubGoal);
+
+            if (nbOfValidGoals >= recursiveSubGoal.nbOfGoalsForValid)
+            {
+                // If we do a true recursive thin change that
+                // For now we consider that One sub-subGoal is enough to validate a subGoal
+                atLeastOneRecursiveIsValid = true;
+                recursiveSubGoal.valid = true;
+            }
+        }
+        return atLeastOneRecursiveIsValid;
+    }
 
 
     private IEnumerator updateGoals()
@@ -69,36 +167,32 @@ public class Goal : MonoBehaviour
         while (true)
         {
             int nbOfValidSubGoals = 0;
-            foreach (SubGoal subGoal in m_subGoals)
+            foreach (SubGoalData subGoal in m_subGoals)
             {
-                int nbOfValidGoals = 0;
-                foreach (PointGoal pointGoal in subGoal.points)
+                // Recursive subgoal
+                // For now we will try to not go below 1 depth of recursion
+                if (subGoal.subGoals.Count != 0)
                 {
-                    // Essayer OverlapCircleNonAlloc() pour optimiser les performances
-                    // Il faudra passer un array de collider suffisament grand pour avoir tous les resultats possibles
-                    //Collider2D[] overlaps = Physics2D.OverlapCircleAll(pointGoal.position, 0.2f);
-                    Collider2D[] overlaps = Physics2D.OverlapPointAll(pointGoal.position);
-                    bool check = false;
-                    foreach (Collider2D overlap in overlaps)
+                    if (processSubGoalsWithRecursion(subGoal))
                     {
-                        if (overlap.tag == "FootPrints")
-                        {
-                            check = true;
-                            nbOfValidGoals++;
-                            break ;
-                        }
+                        subGoal.valid = true;
+                        nbOfValidSubGoals++;
                     }
-                    pointGoal.updateState(check);
+                    else
+                        subGoal.valid = false;
                 }
-                if (nbOfValidGoals >= ((float)subGoal.points.Count * 0.8f))
+                else // "normal" subgoal
                 {
-                    subGoal.valid = true;
-                    nbOfValidSubGoals++;
+                    if (getNbOfValidPointGoals(subGoal) > subGoal.nbOfGoalsForValid)
+                    {
+                        subGoal.valid = true;
+                        nbOfValidSubGoals++;
+                    }
+                    else
+                        subGoal.valid = false;
                 }
-                else
-                    subGoal.valid = false;
-                //Debug.Log(nbOfValidGoals);
             }
+            m_subGoalsValidated = nbOfValidSubGoals;
             if (nbOfValidSubGoals == m_subGoals.Count)
             {
                 GameManager.Instance.win();
@@ -115,7 +209,7 @@ public class Goal : MonoBehaviour
         foreach (Transform child in transform)
         {
             Debug.Log(child.name);
-            m_subGoals.Add(new SubGoal(child));
+            m_subGoals.Add(new SubGoalData(child));
         }
 
         StartCoroutine("updateGoals");
