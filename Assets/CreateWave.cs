@@ -21,7 +21,6 @@ public class CreateWave : MonoBehaviour
     private float[] x_positionsFrequencyAdjusted;
     public GameObject m_waveTile;
 
-    public Vector3  m_globalPos;
     private const float m_amplitude = 0.13f;
     private const float m_frequency = 3.75f;
 
@@ -115,10 +114,7 @@ public class CreateWave : MonoBehaviour
 
             newPosition.x += offsetX;
             newPosition.y += constantOffsetY;
-            // Offset the position to keep the waves separated and shifted
-            newPosition += m_globalPos;
 
-            //m_wave[index, i].transform.position = newPosition;
             m_wave[index, i].transform.localPosition = newPosition;
         }
 
