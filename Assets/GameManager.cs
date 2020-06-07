@@ -38,5 +38,6 @@ public class GameManager : MonoBehaviour
     public void nextLevel()
     {
         SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
+        Time.timeScale = 1;
     }
 }
