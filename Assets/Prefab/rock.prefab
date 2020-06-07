@@ -124,6 +124,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_resourceToGive: {fileID: 0}
+  m_heldPositionRight: {x: 2.2, y: 0.44, z: 0}
+  m_heldPositionLeft: {x: -1.46, y: 0.44, z: 0}
+  m_heldPositionUp: {x: 0.34, y: 1.63, z: 0}
+  m_heldPositionDown: {x: 0.61, y: -2.02, z: 0}
   m_isInteractable: 1
   m_name: rock
 --- !u!198 &592603821

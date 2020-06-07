@@ -9296,56 +9296,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -4016662284508354977, guid: d3eb516497d71594a9868e10208ebaa7,
-        type: 3}
-      propertyPath: m_localPositionWhenHeld.x
-      value: 1.9
-      objectReference: {fileID: 0}
-    - target: {fileID: -4016662284508354977, guid: d3eb516497d71594a9868e10208ebaa7,
-        type: 3}
-      propertyPath: m_localPositionWhenHeld.y
-      value: 0.44
-      objectReference: {fileID: 0}
-    - target: {fileID: -4016662284508354977, guid: d3eb516497d71594a9868e10208ebaa7,
-        type: 3}
-      propertyPath: m_heldPositionRight.x
-      value: 2.2
-      objectReference: {fileID: 0}
-    - target: {fileID: -4016662284508354977, guid: d3eb516497d71594a9868e10208ebaa7,
-        type: 3}
-      propertyPath: m_heldPositionRight.y
-      value: 0.44
-      objectReference: {fileID: 0}
-    - target: {fileID: -4016662284508354977, guid: d3eb516497d71594a9868e10208ebaa7,
-        type: 3}
-      propertyPath: m_heldPositionLeft.x
-      value: -1.46
-      objectReference: {fileID: 0}
-    - target: {fileID: -4016662284508354977, guid: d3eb516497d71594a9868e10208ebaa7,
-        type: 3}
-      propertyPath: m_heldPositionLeft.y
-      value: 0.44
-      objectReference: {fileID: 0}
-    - target: {fileID: -4016662284508354977, guid: d3eb516497d71594a9868e10208ebaa7,
-        type: 3}
-      propertyPath: m_heldPositionDown.x
-      value: 0.61
-      objectReference: {fileID: 0}
-    - target: {fileID: -4016662284508354977, guid: d3eb516497d71594a9868e10208ebaa7,
-        type: 3}
-      propertyPath: m_heldPositionDown.y
-      value: -2.02
-      objectReference: {fileID: 0}
-    - target: {fileID: -4016662284508354977, guid: d3eb516497d71594a9868e10208ebaa7,
-        type: 3}
-      propertyPath: m_heldPositionUp.x
-      value: 0.34
-      objectReference: {fileID: 0}
-    - target: {fileID: -4016662284508354977, guid: d3eb516497d71594a9868e10208ebaa7,
-        type: 3}
-      propertyPath: m_heldPositionUp.y
-      value: 1.63
-      objectReference: {fileID: 0}
     - target: {fileID: 2019203670807423041, guid: d3eb516497d71594a9868e10208ebaa7,
         type: 3}
       propertyPath: m_LocalPosition.x
