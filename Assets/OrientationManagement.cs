@@ -19,6 +19,7 @@ public class OrientationManagement : MonoBehaviour
     private Transform       m_center;
 
     private Transform       m_playerSprite;
+    private PlayerInteraction m_playerInteraction;
 
     private readonly Vector2   m_colliderOffsetForLeft = new Vector2(0.7573f, 0.7505f);
     private readonly Vector2         m_colliderSizeForLeft = new Vector2(0.7613f, 0.6450f);
@@ -52,6 +53,7 @@ public class OrientationManagement : MonoBehaviour
         m_collider = GetComponent<BoxCollider2D>();
         m_center = transform.Find("Center");
         m_playerSprite = transform.Find("PlayerSprite");
+        m_playerInteraction = GetComponent<PlayerInteraction>();
     }
 
     public void setOrientation(Vector2 movement)
@@ -66,6 +68,7 @@ public class OrientationManagement : MonoBehaviour
             m_orientation = Orientation.DOWN;
 
         updateSprite();
+        updateObjectHeld();
     }
 
     /*private void updateCollider()
@@ -137,6 +140,32 @@ public class OrientationManagement : MonoBehaviour
                 break;
         }
     }
+
+    public void updateObjectHeld()
+    {
+        if (m_playerInteraction.m_holdingObject != null)
+        {
+            switch (m_orientation)
+            {
+                case Orientation.RIGHT:
+                    m_playerInteraction.m_holdingObject.transform.localPosition = m_playerInteraction.m_holdingObject.GetComponent<Interactable>().m_heldPositionRight;
+                    break;
+
+                case Orientation.LEFT:
+                    m_playerInteraction.m_holdingObject.transform.localPosition = m_playerInteraction.m_holdingObject.GetComponent<Interactable>().m_heldPositionLeft;
+                    break;
+
+                case Orientation.UP:
+                    m_playerInteraction.m_holdingObject.transform.localPosition = m_playerInteraction.m_holdingObject.GetComponent<Interactable>().m_heldPositionUp;
+                    break;
+
+                case Orientation.DOWN:
+                    m_playerInteraction.m_holdingObject.transform.localPosition = m_playerInteraction.m_holdingObject.GetComponent<Interactable>().m_heldPositionDown;
+                    break;
+            }
+        }   
+    }
+
     // Update is called once per frame
     void Update()
     {

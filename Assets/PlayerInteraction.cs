@@ -10,7 +10,7 @@ public class PlayerInteraction : MonoBehaviour
 
     private Player      m_player;
 
-    private float m_raycastLength = 3.0f;
+    private float m_raycastLength = 2.0f;
 
     public GameObject m_holdingObject = null;
 
@@ -25,7 +25,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (m_holdingObject != null && m_holdingObject.GetComponent<Interactable>()!= null)
+            if (m_holdingObject != null && m_holdingObject.GetComponent<Interactable>() != null)
             {
                 m_holdingObject.GetComponent<Interactable>().drop();
                 m_holdingObject = null;
@@ -35,6 +35,7 @@ public class PlayerInteraction : MonoBehaviour
             {
                 m_currentTarget.GetComponent<Interactable>().use(gameObject);
                 m_holdingObject = m_currentTarget;
+                GetComponent<OrientationManagement>().updateObjectHeld();
             }
         }
     }

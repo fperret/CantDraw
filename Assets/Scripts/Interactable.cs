@@ -6,6 +6,12 @@ public class Interactable : MonoBehaviour
 {
     public GameObject m_resourceToGive;
 
+    public Vector3      m_heldPositionRight;
+    public Vector3      m_heldPositionLeft;
+    public Vector3      m_heldPositionUp;
+    public Vector3      m_heldPositionDown;
+
+
     public bool        m_isInteractable = true;
     private bool         m_isValidated = false;
 
@@ -23,7 +29,6 @@ public class Interactable : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
     }
 
     public void use(GameObject player)
@@ -32,7 +37,6 @@ public class Interactable : MonoBehaviour
         {
             GetComponent<Collider2D>().enabled = false;
             transform.parent = player.transform;
-            transform.localPosition = player.GetComponent<Player>().center().localPosition + new Vector3(player.GetComponent<Player>().m_direction.x, player.GetComponent<Player>().m_direction.y);
         }
     }
 
