@@ -8,6 +8,11 @@ public class Goal : MonoBehaviour
 
     static public bool m_hideSprite = false;
 
+    public NoGoZone m_noGoZone;
+
+    [SerializeField]
+    public List<SubGoalData> m_subGoals = new List<SubGoalData>();
+
     public class PointGoal {
 
         private float m_detectionRadius;
@@ -94,11 +99,6 @@ public class Goal : MonoBehaviour
             valid = false;
         }
     };
-
-
-    [SerializeField]
-    public List<SubGoalData> m_subGoals = new List<SubGoalData>();
-
 
     private int getNbOfValidPointGoals(SubGoalData subGoal, out Interactable interactableOnGoals)
     {
@@ -203,8 +203,12 @@ public class Goal : MonoBehaviour
             m_subGoalsValidated = nbOfValidSubGoals;
             if (nbOfValidSubGoals == m_subGoals.Count)
             {
-                GameManager.Instance.win();
-                yield break;
+                // Valid if nothing is present on the no go zones
+                if (m_noGoZone.checkNoGoZones())
+                {
+                    GameManager.Instance.win();
+                    yield break;
+                }
             }
             yield return new WaitForSeconds(0.25f);
         }
