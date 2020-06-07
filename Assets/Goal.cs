@@ -216,7 +216,7 @@ public class Goal : MonoBehaviour
     {
         foreach (Transform child in transform)
         {
-            Debug.Log(child.name);
+            //Debug.Log(child.name);
             m_subGoals.Add(new SubGoalData(child));
         }
 

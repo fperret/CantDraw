@@ -18,6 +18,8 @@ public class OrientationManagement : MonoBehaviour
 
     private Transform       m_center;
 
+    private Transform       m_playerSprite;
+
     private readonly Vector2   m_colliderOffsetForLeft = new Vector2(0.7573f, 0.7505f);
     private readonly Vector2         m_colliderSizeForLeft = new Vector2(0.7613f, 0.6450f);
 
@@ -38,12 +40,18 @@ public class OrientationManagement : MonoBehaviour
     private readonly Vector3         m_centerPositionForRight = new Vector3(0.91f, 0.58f, 0);
 
 
+    private readonly Vector3        m_spritePositionForRight = new Vector3(0.55f, 0, 0);
+    private readonly Vector3        m_spritePositionForLeft = new Vector3(0.61f, 0, 0);
+    private readonly Vector3        m_spritePositionForUp = new Vector3(0.14f, 0, 0);
+    private readonly Vector3        m_spritePositionForDown = new Vector3(0, 0, 0);
+
 
     // Start is called before the first frame update
     void Start()
     {
         m_collider = GetComponent<BoxCollider2D>();
         m_center = transform.Find("Center");
+        m_playerSprite = transform.Find("PlayerSprite");
     }
 
     public void setOrientation(Vector2 movement)
@@ -57,11 +65,10 @@ public class OrientationManagement : MonoBehaviour
         else
             m_orientation = Orientation.DOWN;
 
-        updateCollider();
-        updateCenter();
+        updateSprite();
     }
 
-    private void updateCollider()
+    /*private void updateCollider()
     {
         switch (m_orientation)
         {
@@ -107,8 +114,29 @@ public class OrientationManagement : MonoBehaviour
                 m_center.localPosition = m_centerPositionForDown;
                 break;
         }
-    }
+    }*/
 
+    private void updateSprite()
+    {
+        switch (m_orientation)
+        {
+            case Orientation.RIGHT:
+                m_playerSprite.localPosition = m_spritePositionForRight;
+                break;
+
+            case Orientation.LEFT:
+                m_playerSprite.localPosition = m_spritePositionForLeft;
+                break;
+
+            case Orientation.UP:
+                m_playerSprite.localPosition = m_spritePositionForUp;
+                break;
+
+            case Orientation.DOWN:
+                m_playerSprite.localPosition = m_spritePositionForDown;
+                break;
+        }
+    }
     // Update is called once per frame
     void Update()
     {

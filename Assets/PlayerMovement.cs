@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         m_rigidBody = GetComponent<Rigidbody2D>();
-        m_animator = GetComponent<Animator>();
+        m_animator = GetComponentInChildren<Animator>();
         m_player = GetComponent<Player>();
         m_orientationManagement = GetComponent<OrientationManagement>();
     }
