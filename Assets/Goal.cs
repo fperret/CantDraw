@@ -100,8 +100,10 @@ public class Goal : MonoBehaviour
     public List<SubGoalData> m_subGoals = new List<SubGoalData>();
 
 
-    private int getNbOfValidPointGoals(SubGoalData subGoal)
+    private int getNbOfValidPointGoals(SubGoalData subGoal, out Interactable interactableOnGoals)
     {
+        interactableOnGoals = null;
+
         // ! This method expect only PointGoal as child so do not pass a recursive subGoal !
         int nbOfValidGoals = 0;
 
@@ -117,9 +119,10 @@ public class Goal : MonoBehaviour
                 // Specific target for all the PointGoals of this SubGoal
                 if (subGoal.target.Length != 0)
                 {
-                    if (overlap.TryGetComponent(out Interactable interactable))
+                    //if (overlap.TryGetComponent(out Interactable interactable))
+                    if (overlap.TryGetComponent(out interactableOnGoals))
                     {
-                        if (interactable.getName() == subGoal.target)
+                        if (interactableOnGoals.getName() == subGoal.target)
                         {
                             check = true;
                             nbOfValidGoals++;
@@ -144,23 +147,26 @@ public class Goal : MonoBehaviour
     bool processSubGoalsWithRecursion(SubGoalData subGoalWithRecursion)
     {
         // If we want to do a real full recursive architecture we need to change something around here probably
-        bool atLeastOneRecursiveIsValid = false;
+        int nbOfValidsSubGoals = 0;
         foreach (SubGoalData recursiveSubGoal in subGoalWithRecursion.subGoals)
         {
             // Here we expect to only encounter PointGoals, else boom
-            int nbOfValidGoals = getNbOfValidPointGoals(recursiveSubGoal);
+            int nbOfValidGoals = getNbOfValidPointGoals(recursiveSubGoal, out Interactable interactableOnGoals);
 
             if (nbOfValidGoals >= recursiveSubGoal.nbOfGoalsForValid)
             {
                 // If we do a true recursive thin change that
                 // For now we consider that One sub-subGoal is enough to validate a subGoal
-                atLeastOneRecursiveIsValid = true;
+                nbOfValidsSubGoals++;
                 recursiveSubGoal.valid = true;
+                if (interactableOnGoals != null)
+                    interactableOnGoals.validatePosition();
             }
+            else
+                recursiveSubGoal.valid = false;
         }
-        return atLeastOneRecursiveIsValid;
+        return (nbOfValidsSubGoals >= 1);
     }
-
 
     private IEnumerator updateGoals()
     {
@@ -183,10 +189,12 @@ public class Goal : MonoBehaviour
                 }
                 else // "normal" subgoal
                 {
-                    if (getNbOfValidPointGoals(subGoal) > subGoal.nbOfGoalsForValid)
+                    if (getNbOfValidPointGoals(subGoal, out Interactable interactableOnGoals) > subGoal.nbOfGoalsForValid)
                     {
                         subGoal.valid = true;
                         nbOfValidSubGoals++;
+                        if (interactableOnGoals != null)
+                            interactableOnGoals.validatePosition();
                     }
                     else
                         subGoal.valid = false;
@@ -198,7 +206,7 @@ public class Goal : MonoBehaviour
                 GameManager.Instance.win();
                 yield break;
             }
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.25f);
         }
     }
 
