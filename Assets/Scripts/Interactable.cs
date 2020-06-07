@@ -6,6 +6,8 @@ public class Interactable : MonoBehaviour
 {
     public GameObject m_resourceToGive;
 
+    public Transform    m_itemsParent;
+
     public Vector3      m_heldPositionRight;
     public Vector3      m_heldPositionLeft;
     public Vector3      m_heldPositionUp;
@@ -31,19 +33,23 @@ public class Interactable : MonoBehaviour
     {
     }
 
-    public void use(GameObject player)
+    public bool use(GameObject player)
     {
         if (m_isInteractable)
         {
             GetComponent<Collider2D>().enabled = false;
             transform.parent = player.transform;
+            return true;
         }
+        else
+            return false;
     }
 
-    public void drop()
+    public bool drop()
     {
         GetComponent<Collider2D>().enabled = true;
-        transform.parent = null;
+        transform.parent = m_itemsParent;
+        return true;
     }
 
     [ExposeMethodInEditor]

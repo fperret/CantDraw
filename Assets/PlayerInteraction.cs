@@ -27,15 +27,19 @@ public class PlayerInteraction : MonoBehaviour
         {
             if (m_holdingObject != null && m_holdingObject.GetComponent<Interactable>() != null)
             {
-                m_holdingObject.GetComponent<Interactable>().drop();
-                m_holdingObject = null;
+                if (m_holdingObject.GetComponent<Interactable>().drop())
+                {
+                    m_holdingObject = null;
+                }
             }
 
             if (m_currentTarget != null && m_currentTarget.GetComponent<Interactable>() != null)
             {
-                m_currentTarget.GetComponent<Interactable>().use(gameObject);
-                m_holdingObject = m_currentTarget;
-                GetComponent<OrientationManagement>().updateObjectHeld();
+                if (m_currentTarget.GetComponent<Interactable>().use(gameObject))
+                {
+                    m_holdingObject = m_currentTarget;
+                    GetComponent<OrientationManagement>().updateObjectHeld();
+                }
             }
         }
     }
