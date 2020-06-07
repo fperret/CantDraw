@@ -7,6 +7,7 @@ public class Interactable : MonoBehaviour
     public GameObject m_resourceToGive;
 
     public bool        m_isInteractable = true;
+    private bool         m_isValidated = false;
 
     [SerializeField]
     private string m_name;
@@ -44,8 +45,12 @@ public class Interactable : MonoBehaviour
     [ExposeMethodInEditor]
     public void validatePosition()
     {
-        m_isInteractable = false;
-        StartCoroutine("validateAnimation");
+        if (!m_isValidated)
+        {
+            m_isValidated = true;
+            m_isInteractable = false;
+            StartCoroutine("validateAnimation");
+        }
     }
 
     public string getName()
@@ -59,14 +64,16 @@ public class Interactable : MonoBehaviour
         Color newColor = m_spriteRenderer.color;
 
         // Darken the sprite for a little while
-        newColor.r *= 0.3f;
-        newColor.g *= 0.3f;
-        newColor.b *= 0.3f;
+        newColor.r *= 0.4f;
+        newColor.g *= 0.4f;
+        newColor.b *= 0.4f;
         m_spriteRenderer.color = newColor;
-        yield return new WaitForSeconds(0.4f);
+        yield return new WaitForSeconds(0.3f);
 
         // Restore the original sprite color
         m_spriteRenderer.color = saveColor;
-        //GetComponent<
+        GetComponent<ParticleSystem>().Play();
+
+        Camera.main.GetComponent<AudioSource>().Play();
     }
 }

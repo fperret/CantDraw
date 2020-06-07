@@ -6,7 +6,7 @@ public class PlayerMovement : MonoBehaviour
 {
     private float m_speed = 5.0f;
 
-    private Vector2 m_movement;
+    public Vector2 m_movement;
 
     private Animator    m_animator;
     private Rigidbody2D m_rigidBody;
@@ -36,15 +36,14 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Update the internal direction if there is a player movement input
-        if (!(m_movement.x == 0 && m_movement.y == 0))
+        if (m_movement != Vector2.zero)
         {
-
             m_animator.SetFloat("Horizontal", m_movement.x);
             m_animator.SetFloat("Vertical", m_movement.y);
 
             m_orientationManagement.setOrientation(m_movement);
+            m_player.direction(m_movement);
         }
-        m_player.direction(m_movement);
     }
 
     void FixedUpdate() {

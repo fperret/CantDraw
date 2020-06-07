@@ -27,17 +27,19 @@ public class Player : MonoBehaviour
 
 
     private OrientationManagement m_orientationManagement;
+    private PlayerMovement          m_playerMovement;
 
     // Start is called before the first frame update
     void Start()
     {
         m_orientationManagement = GetComponent<OrientationManagement>();
+        m_playerMovement = GetComponent<PlayerMovement>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (m_direction.sqrMagnitude != 0)
+        if (m_playerMovement.m_movement.sqrMagnitude != 0)
         {
             if (m_spawnFootPrint)
             {
@@ -91,5 +93,6 @@ public class Player : MonoBehaviour
     }
 
 }
+
 
 

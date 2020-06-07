@@ -104,6 +104,5 @@ public class PlayerInteraction : MonoBehaviour
     // This one should be done once PlayerMovement() is done
     private void FixedUpdate() {
         target();
-
     }
 }
