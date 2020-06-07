@@ -6,7 +6,7 @@ public class Goal : MonoBehaviour
 {
     public int m_subGoalsValidated = 0;
 
-    static public bool m_hideSprite = false;
+    static public bool m_hideSprite = true;
 
     public NoGoZone m_noGoZone;
 

@@ -45,6 +45,8 @@ public class NoGoZone : MonoBehaviour
         foreach (Transform child in transform)
         {
             m_zonesList.Add(child.gameObject);
+            if (Goal.m_hideSprite)
+                child.gameObject.GetComponent<SpriteRenderer>().enabled = false;
         }
     }
 
