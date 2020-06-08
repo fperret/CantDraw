@@ -134,7 +134,7 @@ PrefabInstance:
       objectReference: {fileID: 1814944499}
     - target: {fileID: 313539987, guid: 8f316c772ee9f3341adbd5d1a1078838, type: 3}
       propertyPath: m_maxNbFootPrints
-      value: 25
+      value: 22
       objectReference: {fileID: 0}
     - target: {fileID: 3762152140462493471, guid: 8f316c772ee9f3341adbd5d1a1078838,
         type: 3}

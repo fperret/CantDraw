@@ -51,9 +51,9 @@ public class PlayerInteraction : MonoBehaviour
         m_saveTargetColor = m_currentTarget.GetComponent<SpriteRenderer>().color;
 
         Color newColor = m_saveTargetColor;
-        newColor.r *= 1.3f;
-        newColor.g *= 1.3f;
-        newColor.b *= 1.3f;
+        newColor.r *= 1.5f;
+        newColor.g *= 1.5f;
+        newColor.b *= 1.5f;
         m_currentTarget.GetComponent<SpriteRenderer>().color = newColor;
     }
 
