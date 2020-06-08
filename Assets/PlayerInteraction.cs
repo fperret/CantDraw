@@ -14,6 +14,8 @@ public class PlayerInteraction : MonoBehaviour
 
     public GameObject m_holdingObject = null;
 
+    public MakeSpriteGrid   m_gridManager;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,26 +27,35 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (m_holdingObject != null && m_holdingObject.GetComponent<Interactable>() != null)
+            // TODO RMEOVE
+            if (true || m_holdingObject.name == "Shovel")
             {
-                if (m_holdingObject.GetComponent<Interactable>().drop())
-                {
-                    m_holdingObject = null;
-                }
+                //if (m_currentTarget != null)
+                    dig();
             }
-
-            if (m_currentTarget != null && m_currentTarget.GetComponent<Interactable>() != null)
+            else
             {
-                if (m_currentTarget.GetComponent<Interactable>().use(gameObject))
+                if (m_holdingObject != null && m_holdingObject.GetComponent<Interactable>() != null)
                 {
-                    m_holdingObject = m_currentTarget;
-                    GetComponent<OrientationManagement>().updateObjectHeld();
+                    if (m_holdingObject.GetComponent<Interactable>().drop())
+                    {
+                        m_holdingObject = null;
+                    }
+                }
+
+                if (m_currentTarget != null && m_currentTarget.GetComponent<Interactable>() != null)
+                {
+                    if (m_currentTarget.GetComponent<Interactable>().use(gameObject))
+                    {
+                        m_holdingObject = m_currentTarget;
+                        GetComponent<OrientationManagement>().updateObjectHeld();
+                    }
                 }
             }
         }
     }
 
-        // Update the game object of the new target (highlight, etc...)
+    // Update the game object of the new target (highlight, etc...)
     private void updateNewTargetGameObject(GameObject newCurrentTarget)
     {
         m_currentTarget = newCurrentTarget;
@@ -104,6 +115,22 @@ public class PlayerInteraction : MonoBehaviour
             }
         }
 
+    }
+
+    private void dig()
+    {
+        GameObject tile = m_gridManager.getTileAtPos((int)transform.position.x, (int)transform.position.y);
+        /*if (tile != null)
+        {
+            if (tile.tag == "Ground")
+                m_gridManager.replaceTileAtPos((int)transform.position.x, (int)transform.position.y, m_waterTiles[(int)WaterTiles.WATER_SAND_ALL]);
+            else if (tile.tag == "Water")
+                m_gridManager.replaceTileAtPos((int)transform.position.x, (int)transform.position.y, m_waterTiles[(int)WaterTiles.WATER_SAND_ALL]);
+
+            Debug.Log(tile.transform.position);
+        }*/
+        m_gridManager.switchWaterAndSandAtPos((int)transform.position.x, (int)transform.position.y);
+        // Do a switch ?
     }
 
     // This one should be done once PlayerMovement() is done
