@@ -28,6 +28,7 @@ public class MakeSpriteGrid : MonoBehaviour
     public GameObject m_basicGroundTile;
     public GameObject m_sandTilePimped;
 
+    // On pourrait utiliser des sprites plutot que des prefabs
     public GameObject[] m_waterTiles = new GameObject[14];
 
     // Start is called before the first frame update
@@ -66,36 +67,28 @@ public class MakeSpriteGrid : MonoBehaviour
         return null;
     }
 
-    public bool replaceTileAtPos(int x, int y, GameObject newTile)
-    {
-        if (x >= 0 && y >= 0)
-        {
-            if (x < Constants.g_gridSizeLength && y < Constants.g_gridSizeLength)
-            {
-                Destroy(m_grid[y, x]);
-                GameObject tile = (GameObject)Instantiate(newTile, transform);
-                tile.transform.localPosition = new Vector2(x, y);
-                m_grid[y, x] = tile;
-                return true;
-            }
-        }
-        return false;
-    }
-
     public bool switchWaterAndSandAtPos(int x, int y)
     {
         if (x >= 1 && y >= 1)
         {
             if (x < Constants.g_gridSizeLengthMinusOne && y < Constants.g_gridSizeLengthMinusOne)
             {
-                WaterTiles tileStatus = getStatusFromSurroundingTiles(x, y);
-                Debug.Log(tileStatus);
                 string oldTag = m_grid[y, x].tag;
                 Destroy(m_grid[y, x]);
 
                 GameObject newTile = null;
+                // If current tile is ground, replace it by water and remove footprints on it if any
                 if (oldTag == "Ground")
+                {                
                     newTile = (GameObject)Instantiate(m_waterTiles[(int)getStatusFromSurroundingTiles(x, y)], transform);
+                    Collider2D[] collidersAtTile = Physics2D.OverlapPointAll(new Vector2(x, y));
+                    foreach (Collider2D collider in collidersAtTile)
+                    {
+                        if (collider.tag == "FootPrints")
+                            Destroy(collider.gameObject);
+                    }
+
+                }
                 else if (oldTag == "Water")
                     newTile = (GameObject)Instantiate(m_basicGroundTile, transform);
                 else
@@ -103,10 +96,32 @@ public class MakeSpriteGrid : MonoBehaviour
                 
                 newTile.transform.localPosition = new Vector2(x, y);
                 m_grid[y, x] = newTile;
+
+                updateNeighbors(y, x);
                 return true;
             }
         }
         return false;        
+    }
+
+    // Should only be called by switchWaterAndSandAtPos()
+    private void updateWaterTileAtPos(int x, int y)
+    {
+        if (m_grid[y, x].tag == "Water")
+        {
+            Destroy(m_grid[y, x]);
+            m_grid[y, x] = (GameObject)Instantiate(m_waterTiles[(int)getStatusFromSurroundingTiles(x, y)], transform);
+            m_grid[y, x].transform.localPosition = new Vector2(x, y);
+        }
+    }
+
+    // ! Do not call for x and y too low / high to not hit an out of bound index !
+    private void updateNeighbors(int x, int y)
+    {
+        updateWaterTileAtPos(y - 1, x);
+        updateWaterTileAtPos(y, x - 1);
+        updateWaterTileAtPos(y + 1, x);
+        updateWaterTileAtPos(y, x + 1);
     }
 
     private bool checkBit(pos val, pos check)
@@ -123,6 +138,7 @@ public class MakeSpriteGrid : MonoBehaviour
 
     private WaterTiles getStatusFromSurroundingTiles(int x, int y)
     {
+        /// On peut utiliser 4 booleens tout simplement ?
         pos val = 0;
         // Bottom
         if (m_grid[y - 1, x].tag == "Ground")
